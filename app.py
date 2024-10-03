@@ -34,9 +34,8 @@ def list_coffees():
     # get all coffees in our table
     all_cofis = Coffee.query.all()
     coffee_list = []
+    # coffee_list = [cofi.to_dict() for cofi in all_cofis]
     for cofi in all_cofis:
-        # convert every cofi object to a python dictionary
-        # cofi_dict = {'name':cofi.name, 'price':cofi.price}
         coffee_list.append(cofi.to_dict())
     resp_body = coffee_list
     resp_code = 200
