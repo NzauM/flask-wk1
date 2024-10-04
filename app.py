@@ -1,5 +1,5 @@
-from flask import Flask, make_response,redirect, abort, request
-from models import db,Coffee
+from flask import Flask, make_response,redirect, abort, request,jsonify
+from models import db,Coffee,Order
 from flask_migrate import Migrate
 
 app = Flask(__name__)
@@ -40,7 +40,35 @@ def list_coffees():
     resp_body = coffee_list
     resp_code = 200
     return make_response(resp_body,resp_code)
-        
+
+@app.route('/orders')
+def list_orders():
+    # get all orders
+    # orders_list = []
+    all_orders = Order.query.all()
+    # for order in all_orders:
+    #     order_dict = order.to_dict()
+    #     orders_list.append(order_dict)
+    # return make_response((orders_list),200)
+    order_list = [order.to_dict() for order in all_orders]
+    return make_response(order_list,200)
+
+@app.route('/addcoffee',methods=['POST'])
+def addCoffee():
+    # receive data from request
+    # use this data to create an instance
+    # add this instance to session and commit it
+    coffee_data = request.json
+    print(coffee_data) #{'name': 'Black Coffee', 'price': 50.0}
+    new_coffee = Coffee(name=coffee_data['name'], price=coffee_data['price'])
+    db.session.add(new_coffee)
+    db.session.commit()
+    return make_response({'success':'New Coffee created'},201)
+
+
+
+
+
 
 
 
